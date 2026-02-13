@@ -6,7 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <style>
-    /* ====== BASE ====== */
+ 
     * { box-sizing: border-box; }
     html, body { height: 100%; }
     body {
@@ -19,12 +19,12 @@
       transition: background 0.6s ease;
     }
 
-    /* ====== PAGE 2 (rose plus pur) ====== */
+
     body.page2 {
       background: linear-gradient(to bottom, #ffd6f2, #ffb3e6);
     }
 
-    /* ====== CARTES (conteneurs centrés) ====== */
+
     .card {
       width: min(92vw, 520px);
       background: #fff;
@@ -36,7 +36,7 @@
     }
     [hidden] { display: none !important; }
 
-    /* ====== PAGE 1 : LETTRE ====== */
+
     #page1 h1 {
       margin: 0 0 16px;
       font-size: 28px;
@@ -69,14 +69,14 @@
       min-width: 90px;
     }
     #msg {
-      min-height: 26px;      /* réserve la place, évite les sauts */
+      min-height: 26px;      
       margin-top: 10px;
       color: #c70039;
       font-style: italic;
       font-size: 18px;
     }
 
-    /* ====== PAGE 2 : MESSAGE ====== */
+   
     #page2 h2 {
       margin: 0 0 10px;
       font-size: 30px;
@@ -92,25 +92,25 @@
       font-size: 19px;
       max-height: 55vh;
       overflow: auto;
-      white-space: pre-wrap; /* respecte tes retours à la ligne */
+      white-space: pre-wrap; 
       box-shadow: 0 8px 24px rgba(0,0,0,0.12);
       color: #3a0030;
       text-align: left;
     }
 
-    /* ====== CŒURS VIOLETS ====== */
+  
     #hearts {
       position: fixed;
       inset: 0;
       pointer-events: none;
-      z-index: 1; /* sous le contenu */
+      z-index: 1; 
       overflow: hidden;
     }
 
-    /* Un cœur = 1 conteneur + 2 pseudo-éléments pour dessiner la forme */
+   
     .heart {
       position: fixed;
-      top: -10vh;                    /* commence au-dessus de l’écran */
+      top: -10vh;                   
       width: var(--size, 18px);
       height: var(--size, 18px);
       transform: translateX(0) rotate(45deg);
@@ -131,7 +131,7 @@
       background: #5a189a; /* violet foncé */
     }
 
-    /* Le cœur est dessiné avec 1 carré + 2 cercles (via pseudo-éléments) */
+
     .heart::before,
     .heart::after {
       content: "";
@@ -154,7 +154,6 @@
       50%      { margin-left: 18px; }
     }
 
-    /* Responsive léger */
     @media (max-width: 420px) {
       #choices button { font-size: 20px; padding: 11px 22px; }
       #page1 h1 { font-size: 24px; }
@@ -163,7 +162,6 @@
 </head>
 
 <body>
-  <!-- 🔊 Musique : remplace "musique.mp3" par ton vrai fichier (ex: 01 Amir - Longtemps.mp3) -->
   <audio id="music" preload="auto" src="01 Amir - Longtemps.mp3"></audio>
   <div id="hearts" aria-hidden="true"></div>
   <section id="page1" class="card" aria-label="Lettre">
@@ -176,14 +174,12 @@
 
     <div id="msg" aria-live="polite"></div>
   </section>
-
-  <!-- PAGE 2 : ROSE PUR + MESSAGE -->
   <section id="page2" class="card" aria-label="Message" hidden>
     <h2>💌 Pour toi</h2>
     <div id="messagePerso">
 Ma Ninouille,
 
-Merci d’être toi. Tu illumines mes journées et je veux te le redire simplement : je t’adore. ❤️
+Merci d’être toi. Je ne peux pas être là et je n'ai pas non plus les moyens de t'offrir des roses. Néanmoins il n'existe aucune rose qui puis aller avec toi. En réalité elles sont toutes jalouses de toi. Pour te le redire simplement : je t’adore. ❤️
 
 Gros bisous.
     </div>
@@ -260,4 +256,5 @@ Gros bisous.
   })();
   </script>
 </body>
+
 </html>
