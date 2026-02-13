@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <title>Ma Ninouille ❤️</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <style>
+    /* ====== BASE ====== */
+    * { box-sizing: border-box; }
+    html, body { height: 100%; }
+    body {
+      margin: 0;
+      font-family: Georgia, "Times New Roman", serif;
+      background: linear-gradient(to bottom, #ffe6ec, #ffc3d6); /* Page 1 */
+      display: grid;
+      place-items: center;
+      overflow: hidden;
+      transition: background 0.6s ease;
+    }
+
+    /* ====== PAGE 2 (rose plus pur) ====== */
+    body.page2 {
+      background: linear-gradient(to bottom, #ffd6f2, #ffb3e6);
+    }
+
+    /* ====== CARTES (conteneurs centrés) ====== */
+    .card {
+      width: min(92vw, 520px);
+      background: #fff;
+      padding: 28px 24px;
+      border-radius: 14px;
+      box-shadow: 0 12px 36px rgba(0,0,0,0.15);
+      text-align: center;
+      z-index: 2; /* au-dessus des cœurs */
+    }
+    [hidden] { display: none !important; }
+
+    /* ====== PAGE 1 : LETTRE ====== */
+    #page1 h1 {
+      margin: 0 0 16px;
+      font-size: 28px;
+    }
+    #choices {
+      display: flex;
+      justify-content: center;
+      gap: 14px;
+      flex-wrap: wrap;
+      margin-top: 8px;
+    }
+    #choices button {
+      padding: 12px 26px;
+      font-size: 22px;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: transform .15s ease, background-color .25s ease, opacity .25s ease;
+    }
+    #choices button:active { transform: scale(0.98); }
+    #yesBtn {
+      background: #ff5a7c;
+      color: #fff;
+      box-shadow: 0 6px 14px rgba(255, 0, 76, 0.25);
+      min-width: 110px;
+    }
+    #noBtn {
+      background: #666;
+      color: #fff;
+      min-width: 90px;
+    }
+    #msg {
+      min-height: 26px;      /* réserve la place, évite les sauts */
+      margin-top: 10px;
+      color: #c70039;
+      font-style: italic;
+      font-size: 18px;
+    }
+
+    /* ====== PAGE 2 : MESSAGE ====== */
+    #page2 h2 {
+      margin: 0 0 10px;
+      font-size: 30px;
+      color: #3a0030;
+      text-shadow: 0 1px 0 rgba(255,255,255,0.6);
+    }
+    #messagePerso {
+      margin: 12px auto 0;
+      padding: 16px 18px;
+      background: rgba(255,255,255,0.9);
+      border-radius: 12px;
+      line-height: 1.55;
+      font-size: 19px;
+      max-height: 55vh;
+      overflow: auto;
+      white-space: pre-wrap; /* respecte tes retours à la ligne */
+      box-shadow: 0 8px 24px rgba(0,0,0,0.12);
+      color: #3a0030;
+      text-align: left;
+    }
+
+    /* ====== CŒURS VIOLETS ====== */
+    #hearts {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 1; /* sous le contenu */
+      overflow: hidden;
+    }
+
+    /* Un cœur = 1 conteneur + 2 pseudo-éléments pour dessiner la forme */
+    .heart {
+      position: fixed;
+      top: -10vh;                    /* commence au-dessus de l’écran */
+      width: var(--size, 18px);
+      height: var(--size, 18px);
+      transform: translateX(0) rotate(45deg);
+      animation: fall var(--dur, 4s) linear forwards, sway 2.2s ease-in-out infinite;
+      opacity: 0.95;
+      filter: drop-shadow(0 2px 2px rgba(0,0,0,0.18));
+    }
+    /* Couleur violette par défaut */
+    .heart,
+    .heart::before,
+    .heart::after {
+      background: #7b2cbf; /* violet */
+    }
+    /* Variante : violet plus foncé aléatoire */
+    .heart.dark,
+    .heart.dark::before,
+    .heart.dark::after {
+      background: #5a189a; /* violet foncé */
+    }
+
+    /* Le cœur est dessiné avec 1 carré + 2 cercles (via pseudo-éléments) */
+    .heart::before,
+    .heart::after {
+      content: "";
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      border-radius: 50%;
+    }
+    .heart::before { top: -50%; left: 0; }
+    .heart::after  { left: -50%; top: 0; }
+
+    /* Chute verticale */
+    @keyframes fall {
+      0%   { transform: translate3d(0, -10vh, 0) rotate(45deg); }
+      100% { transform: translate3d(0, 110vh, 0) rotate(45deg); opacity: 0.85; }
+    }
+    /* Balancement horizontal doux (sway) */
+    @keyframes sway {
+      0%, 100% { margin-left: -18px; }
+      50%      { margin-left: 18px; }
+    }
+
+    /* Responsive léger */
+    @media (max-width: 420px) {
+      #choices button { font-size: 20px; padding: 11px 22px; }
+      #page1 h1 { font-size: 24px; }
+    }
+  </style>
+</head>
+
+<body>
+  <!-- 🔊 Musique : remplace "musique.mp3" par ton vrai fichier (ex: 01 Amir - Longtemps.mp3) -->
+  <audio id="music" preload="auto" src="01 Amir - Longtemps.mp3"></audio>
+  <div id="hearts" aria-hidden="true"></div>
+  <section id="page1" class="card" aria-label="Lettre">
+    <h1>Veux‑tu être ma Valentine ? ❤️</h1>
+
+    <div id="choices">
+      <button id="yesBtn" type="button">Oui</button>
+      <button id="noBtn"  type="button">Non</button>
+    </div>
+
+    <div id="msg" aria-live="polite"></div>
+  </section>
+
+  <!-- PAGE 2 : ROSE PUR + MESSAGE -->
+  <section id="page2" class="card" aria-label="Message" hidden>
+    <h2>💌 Pour toi</h2>
+    <div id="messagePerso">
+Ma Ninouille,
+
+Merci d’être toi. Tu illumines mes journées et je veux te le redire simplement : je t’adore. ❤️
+
+Gros bisous.
+    </div>
+  </section>
+
+  <script>
+  (function () {
+    'use strict';
+
+    // === Références DOM ===
+    const page1 = document.getElementById('page1');
+    const page2 = document.getElementById('page2');
+    const yesBtn = document.getElementById('yesBtn');
+    const noBtn  = document.getElementById('noBtn');
+    const msg    = document.getElementById('msg');
+    const music  = document.getElementById('music');
+    const heartsContainer = document.getElementById('hearts');
+
+    const funnyMessages = [
+      "Tu es vraiment sûre ? 😳",
+      "Oh non… réfléchis bien 😳",
+      "Allez… juste un petit OUI ❤️",
+      "Tu me brises le cœur 😭",
+      "Je sais que tu veux dire oui 😏",
+      "Essaie encore 😭❤️",
+      "Arrête non 😭 ?",
+      "Donc tu ne m'aimes pas ? 😳😭",
+      "Jure que tu as cliqué sur non ?"
+    ];
+    let yesSize = 22, noSize = 22;
+
+    noBtn.addEventListener('click', () => {
+      yesSize += 12;
+      noSize  -= 3;
+      if (noSize < 12) noSize = 12;
+
+      yesBtn.style.fontSize = yesSize + 'px';
+      noBtn.style.fontSize  = noSize  + 'px';
+      msg.textContent = funnyMessages[Math.floor(Math.random() * funnyMessages.length)];
+    });
+
+    let heartsIntervalId = null;
+
+    yesBtn.addEventListener('click', () => {
+      const p = music.play();
+      if (p && typeof p.then === 'function') {
+        p.catch(err => {
+          console.warn('Lecture audio bloquée ou fichier introuvable :', err);
+        });
+      }
+      document.body.classList.add('page2');
+      page1.hidden = true;
+      page2.hidden = false;
+      startHearts();
+    });
+    function spawnHeart() {
+      const h = document.createElement('div');
+      h.className = 'heart';
+      if (Math.random() < 0.5) h.classList.add('dark');
+      const size = 14 + Math.floor(Math.random() * 13);
+      h.style.setProperty('--size', size + 'px');
+      const dur = (3 + Math.random() * 3).toFixed(2) + 's';
+      h.style.setProperty('--dur', dur);
+      h.style.left = Math.random() * 100 + 'vw';
+      h.style.animationDelay = (Math.random() * 1.5).toFixed(2) + 's';
+      heartsContainer.appendChild(h);
+      setTimeout(() => h.remove(), 8000);
+    }
+
+    function startHearts() {
+      for (let i = 0; i < 10; i++) spawnHeart();
+      heartsIntervalId = setInterval(spawnHeart, 280);
+    }
+  })();
+  </script>
+</body>
+</html>
